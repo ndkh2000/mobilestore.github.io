@@ -1,0 +1,50 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model PagedList.IPagedList<ModelEF.Model.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/KHANHHUNG/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    <i class=" fa fa-user"></i>&nbsp;Product Management
+}
+@using (Html.BeginForm("Index", "User", FormMethod.Get))
+{
+    <div class="col-lg-12 form-group">
+        <div class="col-md-6">
+            @Html.ActionLink("Create new", "Create", "Product", new { @class = "btn btn-danger" })
+        </div>
+        <div class="col-md-4">
+            <input type="text" value="@ViewBag.SearchString" name="searchString" placeholder="Enter keyword to search" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Search" class="btn btn-default" />
+        </div>
+    </div>
+}
+<div class="col-lg-12 form-group">
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Unitcost</th>
+            <th>Quantity</th>
+            <th>Product Type</th>
+            <th>#</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Name</td>
+                <td>@item.Unitcost</td>
+                <td>@item.Quantity</td>
+                <td>@item.ProductType</td>
+                <td>
+                    @Html.ActionLink("Detail", "Detail", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, @searchString = ViewBag.SearchString }))
+</div>
